@@ -119,3 +119,17 @@ SELECT location, date, total_cases,
     (CAST(total_cases AS float) / SUM(CAST(total_cases AS float)) OVER (PARTITION BY date)) * 100 AS percentage_contribution
 FROM Covid19Data..CovidStats
 WHERE continent IS NOT NULL;
+
+-- Creating Views to store data for later visualizations:
+
+CREATE VIEW TotalCasesInContinents AS
+SELECT location, MAX(CAST(total_cases AS bigint)) AS TotalCasesOverall
+FROM Covid19Data..CovidStats
+WHERE continent IS NULL AND location IN ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania')
+GROUP BY location;
+
+CREATE VIEW TotalDeathsInContinents AS
+SELECT location, MAX(CAST(total_deaths AS bigint)) AS TotalDeathsOverall
+FROM Covid19Data..CovidStats
+WHERE continent IS NULL AND location IN ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania')
+GROUP BY location;
